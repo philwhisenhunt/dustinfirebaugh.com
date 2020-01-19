@@ -1,11 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog MDX`,
-    author: `Matt Hagner`,
+    title: `Dustin Firebaugh`,
+    author: `Dustin Firebaugh`,
     description: `An extension of the gatsby starter blog, with support for MDX`,
-    siteUrl: `https://gatsby-starter-blog-mdx-demo.netlify.com/`,
+    siteUrl: `https://dustinfirebaugh.com/`,
     social: {
-      twitter: `mattinthecouch`,
+      twitter: `dustinfirebaugh`,
     },
   },
   plugins: [
@@ -14,6 +14,13 @@ module.exports = {
       options: {
         path: `${__dirname}/content/blog`,
         name: `blog`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/project-blog`,
+        name: `project-blog`,
       },
     },
     {
@@ -29,9 +36,7 @@ module.exports = {
         extensions: ['.mdx', '.md'],
         // a workaround to solve mdx-remark plugin compat issue
         // https://github.com/gatsbyjs/gatsby/issues/15486
-        plugins: [
-          `gatsby-remark-images`,
-        ],
+        plugins: [`gatsby-remark-images`],
         gatsbyRemarkPlugins: [
           {
             resolve: `gatsby-remark-images`,
