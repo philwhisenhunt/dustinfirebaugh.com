@@ -8,7 +8,7 @@ excerpt: 'One of my first hackrva Projects'
 
 ![hrva_sign](./hrva_sign.jpg)
 
-I mention this build in [My Origin Story with HackRVA](/My_HackRVA_Origin_Story)
+I mention this build in [My Origin Story with HackRVA](/blog/My_HackRVA_Origin_Story)
 
 This was one of my first projects at HackRVA. It's not built well. Rather, it's overbuilt.
 
