@@ -25,8 +25,8 @@ class Index extends React.Component {
           some personal projects, and share knowledge.
         </p>
         <p>
-          Check out the links in the top right of the page. I hope you don't get
-          lost.
+          Check out the my <Link to="/about">about me</Link> and join my{' '}
+          <Link to="/mailing_list">mailing list</Link>
         </p>
         <Image imgName="Caricature.jpg" />
         <Bio />

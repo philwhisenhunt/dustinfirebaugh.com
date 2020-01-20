@@ -5,42 +5,40 @@ import { scale } from '../utils/typography'
 
 function Header({ title }) {
   return (
-    <>
-      <header
+    <header
+      style={{
+        fontFamily: `Montserrat, sans-serif`,
+        background: `rebeccapurple`,
+      }}
+    >
+      <div
         style={{
-          fontFamily: `Montserrat, sans-serif`,
-          background: `rebeccapurple`,
+          margin: `0 auto`,
+          maxWidth: 960,
+          padding: `1.45rem 1.0875rem`,
+          display: `flex`,
+          alignItems: `center`,
         }}
       >
-        <div
+        <h1
           style={{
-            margin: `0 auto`,
-            maxWidth: 960,
-            padding: `1.45rem 1.0875rem`,
-            display: `flex`,
-            alignItems: `center`,
+            margin: 0,
           }}
         >
-          <h1
+          <Link
+            to="/"
             style={{
-              margin: 0,
+              color: `white`,
+              boxShadow: `none`,
+              textDecoration: `none`,
             }}
           >
-            <Link
-              to="/"
-              style={{
-                color: `white`,
-                boxShadow: `none`,
-                textDecoration: `none`,
-              }}
-            >
-              {title}
-            </Link>
-          </h1>
-          <NavBar />
-        </div>
-      </header>
-    </>
+            {title}
+          </Link>
+        </h1>
+        <NavBar />
+      </div>
+    </header>
   )
 }
 

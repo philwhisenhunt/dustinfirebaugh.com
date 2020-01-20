@@ -6,6 +6,7 @@ module.exports = {
     siteUrl: `https://dustinfirebaugh.com/`,
     social: {
       twitter: `dustinfirebaugh`,
+      github: `dfirebaugh`,
     },
   },
   pathPrefix: '/dustinfirebaugh.com',
