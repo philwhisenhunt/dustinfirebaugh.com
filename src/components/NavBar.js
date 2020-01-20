@@ -15,6 +15,10 @@ function NavBar() {
       Text: 'About',
       to: `/about`,
     },
+    {
+      Text: 'Mailing List',
+      to: `/mailing_list`,
+    },
   ]
   return (
     <nav style={{ marginLeft: `auto` }}>

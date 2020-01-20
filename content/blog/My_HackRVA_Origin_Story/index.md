@@ -74,7 +74,7 @@ At 30 bucks a month, it was an easy decision.
 
 When I joined there were about 30 members at HackRVA. I'm happy to note that these days the membership floats around 100-120 members (I haven't looked in a while).
 
-I started showing up everyweek and, as per usual, I kept my head down for a while to kind of catch my bearings. However, when you are in a place where people are buzzing around working on projects. It's kind of hard to keep your head down. Eventually you catch he bug and start building things. So, I started thinking about what my first project might be. I considered that maybe I could help solve the problem of "this place is hard to find" by making a sign.
+I started showing up everyweek and, as per usual, I kept my head down for a while to kind of catch my bearings. However, when you are in a place where people are buzzing around working on projects. It's kind of hard to keep your head down. Eventually you catch the bug and start building things. So, I started thinking about what my first project might be. I considered that maybe I could help solve the problem of "this place is hard to find" by making a sign.
 
 ### The Sign
 
