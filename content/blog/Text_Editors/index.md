@@ -24,7 +24,7 @@ Out in the wild i've found myself on strange systems or perhaps mounted into a s
 
 #### What's so great about vim?
 
-`vim` is very feature rich! If your looking for a powerful tool and are willing to learn a few keyboard shortcuts, `vim` has a lot to offer you.
+`vim` is very feature rich! If you're looking for a powerful tool and are willing to learn a few keyboard shortcuts, `vim` has a lot to offer you.
 
 Some claim that it has a steep learning curve.
 
@@ -47,7 +47,7 @@ Imagine yourself ssh'ed(remotely connected to another machine/server via a termi
 
 Graphical `emacs` is garbage. Go for the command line `emacs` or choose to use [spacemacs](https://www.spacemacs.org/). Perhaps, the graphical `emacs` is not garbage, but I did not have the patience to give it the time of day. Graphical `vim` is garbage too though. Maybe it's not garbage, but it's uglier than I want it to be.
 
-If you've made the decision that you will learn a command line based text editor in hopes of taken advantage of all those tastey features, don't disqualify `emacs`. Especially if you are doing [Functional Programming](https://en.wikipedia.org/wiki/Functional_programming). `emacs` has a built in scripting language (emacs list) that can be used to extend the functionality of `emacs`.
+If you've made the decision that you will learn a command line based text editor in hopes of taking advantage of all those tasty features, don't disqualify `emacs`. Especially if you are doing [Functional Programming](https://en.wikipedia.org/wiki/Functional_programming). `emacs` has a built in scripting language (emacs lisp) that can be used to extend the functionality of `emacs`.
 
 Btw, you can emulate vi/vim with `emacs` if you enable "evil mode".
 
