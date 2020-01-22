@@ -54,7 +54,7 @@ class About extends React.Component {
             </a>
           </li>
           <li>
-            <a href={`https://twitter.com/${social.github}`}>
+            <a href={`https://github.com/${social.github}`}>
               Find me on Github
             </a>
           </li>
