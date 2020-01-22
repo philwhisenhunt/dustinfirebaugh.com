@@ -40,10 +40,10 @@ class About extends React.Component {
 
         <p>
           I'm a software engineer, button masher, musician, maker/breaker of
-          things, technologist, tinkerer, and student of the world. I was born
-          in 1988 (you can do the math) and, if I'm lucky, I will live for{' '}
-          <strong>{daysTillDeath}</strong> more days. Whoa, I guess I better get
-          to work.
+          things, technologist, tinkerer, creator, and student of the world. I
+          was born in 1988 (you can do the math) and, if I'm lucky, I will live
+          for <strong>{daysTillDeath}</strong> more days. Whoa, I guess I better
+          get to work.
         </p>
 
         <Image imgName="df_headshot.jpg" />
