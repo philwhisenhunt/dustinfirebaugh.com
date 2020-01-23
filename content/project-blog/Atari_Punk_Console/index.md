@@ -2,8 +2,8 @@
 path: '/Atari_Punk_Console'
 date: '2020-01-22'
 title: 'Atari Punk Console'
-tags: ['Atari_Punk_Console', 'makerspace', 'podcast']
-excerpt: 'Makers Unplugged'
+tags: ['Atari_Punk_Console', 'diy synth']
+excerpt: 'Atari Punk Console'
 ---
 
 > Atari Punk console is an astable square wave oscillator driving a monostable oscillator that creates a single (square) pulse. -- [Wikipedia](https://en.wikipedia.org/wiki/Atari_Punk_Console)
