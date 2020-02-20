@@ -8,13 +8,103 @@ excerpt: 'A quick look at Web Assembly'
 
 ![magic](https://media.giphy.com/media/NmerZ36iBkmKk/giphy.gif)
 
-... Straight to a Go Web Assembly example? [game of life in go wasm](https://github.com/dfirebaugh/game-of-life-wasm)
+I made a demo app using Go compiled to Web Assembly. Check it out the repo: [game of life in go wasm](https://github.com/dfirebaugh/game-of-life-wasm)
+
+![game-of-life-gif](./images/game-of-life.gif)
 
 This stuff is exciting!
 
-#### Will it Replace Javascript?
+I'll go over some techincal details about the code first, but feel free to skip ahead to the [High Level on Web Assembly](#High-Level-on-Web-Assembly) section.
 
-No. Web Assembly is intended to run along side of Javascript. Allowing you to use Javascript for it's strengths (expressiveness, ease of use, manipulating DOM nodes) while gaining efficiencies of near native speeds and strong typing of other language (e.g. C, C++, Rust, etc...)
+## A Look at the code
+
+#### life.go
+
+I attempted to keep this file entirely unrelated to the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction) and Web Assembly. It's simply an implementation of game of life. I created an [interface](https://tour.golang.org/methods/9) called a _Renderer_ in hopes that I could eventually create multiple types of renderers (e.g. canvas, terminal, etc...)
+
+The one implementation of Renderer is [dom.go](#dom.go).
+
+#### <a name="dom.go"></a>dom.go
+
+This is where the secret sauce is. If you're only here to look at some code examples, this is probably where you should look.
+https://github.com/dfirebaugh/game-of-life-wasm/blob/master/wasm/dom/dom.go
+
+This file makes heavy use of Go's [syscall/js](#syscall/js) library.
+This is how we can [manipulate the dom](#Manipulating-the-DOM) with Go.
+
+#### wasm_exec.js
+
+`./client/wasm_util/wasm_exec.js` is provided by Go and can usually be found at
+`\$(go env GOROOT)/misc/wasm/wasm_exec.js`
+This is kind of the glue code that helps your javascript communicate with Web Assembly modules written in Go.
+
+It would be nice if this packaged as an npm module. This would allow me to install the "glue code" by simply typing `npm install go-wasm-exec` or something similar.
+
+One of the challenges with this is that this file ships with Go and it's recommened to use the version of that file that corresponds with the Go version that you are using.
+
+I wanted to leave this file unmodified because it was provided by Go.
+
+You'll notice several helper functions that make translating between types in wasm and types in JS. Btw, the only types in web assembly are numbers. So, ints and floats... There are several functions being imported which are used by go's syscall/js package.
+
+This file also handles [loading the wasm file.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate) If I decided not to use `syscall/js` package from Go, I could have ran this `WebAssembly.intantiate()` function myself and added my own imports. However, I wanted to try to keep things simple for this demo.
+
+#### wasm_loader.js
+
+To leave `wasm_exec.js` unmodified, I decided to import `wasm_exec.js` as an [es module](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/) into a new file `wasm_loader.js`.
+
+`wasm_loader.js` is a very small file that only loads the wasm file.
+
+```javascript
+import './wasm_exec.js'
+
+const go = new Go()
+WebAssembly.instantiateStreaming(fetch('wasm.wasm'), go.importObject)
+  .then(result => {
+    go.run(result.instance)
+  })
+  .catch(console.error)
+```
+
+#### server.go
+
+There's nothing special about `server.go`. It's simply a web server that serves up the client and serves up the wasm file.
+
+Note that the wasm file is being served up with a specific MIME type.
+
+```Go
+			resp.Header().Set("content-type", "application/wasm")
+```
+
+#### <a name="Manipulating-the-DOM"></a>Manipulating the DOM
+
+[Document Object Model - DOM](https://en.wikipedia.org/wiki/Document_Object_Model)
+
+Manipulating the DOM with Go actually seemed to be a step backwards. It felt similar to the jquery days. Or rather, it felt like managing the DOM with vanilla JS where you do some query selectors and imparatively make changes as needed. As a JS dev, this was fairly simple to pick up because you are calling the same APIs that javascript has access to.
+
+I found that there were some obvious rendering improvements that I could have made by implementing some lazy rendering or diffing to reduce how many times I wrote to the DOM. For this demo, I felt OK with ignoring these improvements. However, that isn't something unique to web assembly. I can see how libraries could make this low effort for us in the future.
+
+I much prefer the declarative nature of something like React/jsx or even standard HTML than having to manually to call `createElement` and similar methods. So, even though I did a lot of DOM manipulation with Go in this app, I can't say I recommend it.
+
+Tools like [wasm-bindgen](https://rustwasm.github.io/wasm-bindgen/) make sharing memory/values pretty straight forward, but eventually it will be built into the spec.
+
+#### Shared Memory
+
+> The WebAssembly.Memory object has a [buffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/buffer) property is a resizable [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) that holds the raw bytes of memory accessed by a WebAssembly Instance.
+> -- [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory)
+
+In my demo, I'm not accessing this "memory" directly, but the go package that I'm using is definitely taking advantage of the shared memory buffer.
+
+I would like to explore more with sharing values to JS so that I can use javascript or a library like react to manage the DOM.
+
+#### <a name="syscall/js"></a>syscall/js
+
+[syscall/js](https://golang.org/pkg/syscall/js/) is a package with several functions that help share data between JS and Go. In my demo, I use it mostly for DOM manipulation. Maybe in my next project I'll explore more with function such as `CopyBytesToJS` which seems to allow you to directly share values from Go to JS.
+
+#### Lessons Learned and Gotchas
+
+I cover this a bit later in [Problems with Go](#Problems-with-Go)
+
+## <a name="High-Level-on-Web-Assembly"></a> High Level on Web Assembly
 
 ### What is Web Assembly?
 
@@ -28,6 +118,10 @@ There's a bit more to it than that.
 [Javascript Engines](https://en.wikipedia.org/wiki/JavaScript_engine)(most notably [V8](https://v8.dev/) on Chrome and [Spider Monkey](https://en.wikipedia.org/wiki/SpiderMonkey) on Firefox ) run on top of a virtual machine in the browser (check out the [history lesson](#Some-Context-and-a-brief-history-lesson) a bit further down). Web Assembly runs on top of this same virtual machine.
 
 The name Web Assembly is a bit of a mislabel because It's not quite [Web](https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/) and it's not quite [Assembly](https://stackoverflow.com/questions/1782415/what-is-the-difference-between-assembly-code-and-bytecode) (it's a bytecode intended to run on a VM -- assembly usually refers to opcodes compiled to something natively executable by machines). Yes, you can compile to target browsers, but there's actually a lot of potential for web assembly running outside the browser. (see further in this writing [Web Assembly Outside of the Web - WASI](#Web-Assembly-Outside-of-the-Web---WASI))
+
+### Will it Replace Javascript?
+
+No. Web Assembly is intended to run along side of Javascript. Allowing you to use Javascript for it's strengths (expressiveness, ease of use, manipulating DOM nodes) while gaining efficiencies of near native speeds and strong typing of other language (e.g. C, C++, Rust, etc...)
 
 ### Why do you need to be aware of Web Assembly Today?
 
@@ -52,13 +146,15 @@ Web Assembly is built for safety. Being that it runs off of the same VM that jav
 
 Web Assembly will allow the use of mature security and cryptographic libraries that previously limited availability for the web.
 
+#### Security White Papers on Web Assembly:
+
 - [Native Exploits](https://i.blackhat.com/us-18/Thu-August-9/us-18-Lukasiewicz-WebAssembly-A-New-World-of-Native_Exploits-On-The-Web.pdf)
 - [Security Chasms of WASM](https://i.blackhat.com/us-18/Thu-August-9/us-18-Lukasiewicz-WebAssembly-A-New-World-of-Native_Exploits-On-The-Web-wp.pdf)
 
 Also note that Web Assembly is disassemblable via tools provided by the Web Assembly team.
 see [WABT](https://github.com/WebAssembly/wabt)
 
-## Some Context and a brief history lesson
+## <a name="Some-Context-and-a-brief-history-lesson"></a>Some Context and a brief history lesson
 
 ![90sweb_img](https://media.giphy.com/media/OeEVCJ2UqMQNO/giphy.gif)
 
@@ -66,11 +162,11 @@ see [WABT](https://github.com/WebAssembly/wabt)
 
 ### The Speed of Javascript
 
-These days, Javascript is blazing fast. However, this wasn't always the case. Javascript wasn't built to be fast.
-
-With any language there are usually tradeoffs. Javascript has a lot of ease of use and expressiveness. This allows for developers to get up and going quickly with it and allows for rapid prototyping of web apps.
+These days, Javascript is blazing fast. However, this wasn't always the case.
 
 [Javascript was written in ten days.](https://brendaneich.com/2011/06/new-javascript-engine-module-owner/) Well, the first Javascript Engine Prototype took 10 days. It wasn't built for speed. Speed came later when browsers started implementing [JIT](https://en.wikipedia.org/wiki/Just-in-time_compilation) (Just In Time Compilation) compilers in efforts to increase performance.
+
+With any language there are usually tradeoffs. Javascript has a lot of ease of use and expressiveness. This allows for developers to get up and going quickly with it and allows for rapid prototyping of web apps.
 
 The first JIT compilers in major browsers were implemented in 2008. This allowed browsers to increase the speed of javascript code running on the web making js code almost 10 times faster.
 
@@ -84,7 +180,7 @@ A decent demonstration of Web Assembly's performance: [youtube video - WebAssemb
 
 This is a great book if you like learning by doing and it happens to be a decent intro to Rust.
 
-Alternatively, here is a open source free to read book [Rust and Web Assembly](https://rustwasm.github.io/book/) (Disclaimer - I have not read the "Rust and Web Assembly" book aside from skimming through a few chapters)
+Alternatively, here is an open source free to read book [Rust and Web Assembly](https://rustwasm.github.io/book/) (Disclaimer - I have not read the "Rust and Web Assembly" book aside from skimming through a few chapters)
 
 ## WAT
 
@@ -112,7 +208,7 @@ I chose to do some experimenting with Web Assembly with Go for a few reasons.
 
 Perhaps more importantly, we use it a lot at work and I was interested in evaluating how viable Go would be for writing Web Assembly modules.
 
-### Problems with Go
+### <a name="Problems-with-Go"></a>Problems with Go
 
 Go is intended for writing software (usually) on servers. One of Go's tradeoffs is that they didn't care a lot about how big the binaries compile to. Therefore, Go binaries are bigger (in comparison to Rust or C). This is because Go runtime is fairly large. Which is nice sometimes, because there are many built-ins in the standard libraries.
 
