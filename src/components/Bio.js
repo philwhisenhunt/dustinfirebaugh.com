@@ -30,7 +30,7 @@ function Bio() {
             <p>
               Written by <strong>{author}</strong> who lives and works in
               Cincinnati. He likes building software and helping people learn!
-              <Link to={`/mailing_list`}>
+              <Link style={{ marginLeft: '1em' }} to={`/mailing_list`}>
                 You should sign up for the mailing list!
               </Link>
             </p>

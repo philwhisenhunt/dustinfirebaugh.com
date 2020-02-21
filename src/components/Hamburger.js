@@ -50,6 +50,7 @@ function Hamburger({ menuLinks }) {
         {menuLinks.map((link, i) => {
           return (
             <Link
+              key={i}
               to={link.to}
               style={{
                 color: `white`,
