@@ -1,27 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
-function NavBar() {
-  const menuLinks = [
-    {
-      Text: 'Project-Blog',
-      to: `/project-blog`,
-    },
-    {
-      Text: 'Blog',
-      to: `/blog`,
-    },
-    {
-      Text: 'About',
-      to: `/about`,
-    },
-    {
-      Text: 'Mailing List',
-      to: `/mailing_list`,
-    },
-  ]
+function NavBar({ menuLinks }) {
   return (
-    <nav style={{ marginLeft: `auto` }}>
+    <nav className="navbar" style={{ marginLeft: `auto` }}>
       <ul style={{ listStyle: 'none', display: 'flex', margin: 0 }}>
         {menuLinks.map((link, i) => {
           return (
