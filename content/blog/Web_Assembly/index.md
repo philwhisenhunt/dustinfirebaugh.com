@@ -117,7 +117,7 @@ There's a bit more to it than that.
 
 [Javascript Engines](https://en.wikipedia.org/wiki/JavaScript_engine)(most notably [V8](https://v8.dev/) on Chrome and [Spider Monkey](https://en.wikipedia.org/wiki/SpiderMonkey) on Firefox ) run on top of a virtual machine in the browser (check out the [history lesson](#Some-Context-and-a-brief-history-lesson) a bit further down). Web Assembly runs on top of this same virtual machine.
 
-The name Web Assembly is a bit of a mislabel because It's not quite [Web](https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/) and it's not quite [Assembly](https://stackoverflow.com/questions/1782415/what-is-the-difference-between-assembly-code-and-bytecode) (it's a bytecode intended to run on a VM -- assembly usually refers to opcodes compiled to something natively executable by machines). Yes, you can compile to target browsers, but there's actually a lot of potential for web assembly running outside the browser. (see further in this writing [Web Assembly Outside of the Web - WASI](#Web-Assembly-Outside-of-the-Web---WASI))
+The name Web Assembly is a bit of a mislabel because It's not quite [Web](https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/) and it's not quite [Assembly](https://stackoverflow.com/questions/1782415/what-is-the-difference-between-assembly-code-and-bytecode) (it's a bytecode intended to run on a VM -- assembly usually refers to opcodes compiled to something natively executable by machines). Yes, you can compile to target browsers, but there's actually a lot of potential for web assembly running outside the browser. (see further in this writing [Web Assembly Outside of the Web - WASI](#Web-Assembly-WASI))
 
 ### Will it Replace Javascript?
 
@@ -258,7 +258,7 @@ Web Assembly is an Intermediate Representation. It isn't targeting a specific ma
 ![web assembly IR - img](https://2r4s9p1yi1fa2jd7j43zph8r-wpengine.netdna-ssl.com/files/2017/02/04-01-langs09.png)
 (image by Lin Clark of [code cartoons](https://code-cartoons.com/https://code-cartoons.com/))
 
-### Web Assembly Outside of the Web - WASI
+### <a name="Web-Assembly-WASI"></a>Web Assembly Outside of the Web - WASI
 
 > WASI is a modular system interface for WebAssembly.
 > --[wasi.dev](https://wasi.dev/)
