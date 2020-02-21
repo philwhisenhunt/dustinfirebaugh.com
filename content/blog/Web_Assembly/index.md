@@ -87,7 +87,7 @@ I much prefer the declarative nature of something like React/jsx or even standar
 
 Tools like [wasm-bindgen](https://rustwasm.github.io/wasm-bindgen/) make sharing memory/values pretty straight forward, but eventually it will be built into the spec.
 
-#### Shared Memory
+#### <a name="shared-memory"></a>Shared Memory
 
 > The WebAssembly.Memory object has a [buffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory/buffer) property is a resizable [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) that holds the raw bytes of memory accessed by a WebAssembly Instance.
 > -- [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Memory)
@@ -144,7 +144,11 @@ It's often said that Web Assembly is fast. "Fast" is in reference to how fast it
 
 Web Assembly is built for safety. Being that it runs off of the same VM that javascript uses, it's sandboxed just as javascript is.
 
-Web Assembly will allow the use of mature security and cryptographic libraries that previously limited availability for the web.
+The [wasm security model](https://webassembly.org/docs/security/) ensures that wasm modules can't escape the sandbox without going through appropriate APIs.
+
+There are some measures in place to ensure [memory safety.](https://hacks.mozilla.org/2017/07/memory-in-webassembly-and-why-its-safer-than-you-think/) When instantiating a wasm module, a new Javascript object is created which is attached to the wasm instance. Internally, this memory object creates an Array Buffer ([mentioned previously.](#shared-memory)) Because this is just a JS object, it's tracked by the JS garbage collector (even though it's contents are not).
+
+Wasm modules are also isolated in memory unless explicitly included in the imported memory object.
 
 #### Security White Papers on Web Assembly:
 
@@ -186,6 +190,21 @@ Alternatively, here is an open source free to read book [Rust and Web Assembly](
 
 [WAT](https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format) (Web Assembly Text Format) is what allows Web Assembly to be human readable. It's probably not recommended to write an entire app this way. However, it's good to know for the purposes of learning how Web Assembly works behind the scenes and can be a useful tool for debugging.
 
+If you've ever programmed in LISP, wat might seem familiar because it uses [S-Expression](https://www.computerhope.com/jargon/s/s-expression.htm)
+
+example:
+
+```wat
+(module
+  (type (;0;) (func (param i32 i32) (result i32)))
+  (func (;0;) (type 0) (param i32 i32) (result i32)
+    local.get 0
+    local.get 1
+    i32.add)
+  (export "add" (func 0)))
+
+```
+
 ## Rust
 
 Rust has been voted [Stack Overflow’s most loved language for four years in a row](https://insights.stackoverflow.com/survey/2019)
@@ -212,13 +231,15 @@ Perhaps more importantly, we use it a lot at work and I was interested in evalua
 
 Go is intended for writing software (usually) on servers. One of Go's tradeoffs is that they didn't care a lot about how big the binaries compile to. Therefore, Go binaries are bigger (in comparison to Rust or C). This is because Go runtime is fairly large. Which is nice sometimes, because there are many built-ins in the standard libraries.
 
+It seems that the Go team is actively working on solutions to provide better support for compiling to wasm.
+
 ### TinyGo
 
 [TinyGo](https://tinygo.org/) is a compiler for Go intended for use on microcontrollers. TinyGo now also supports compiling to Web Assembly. It's based on [LLVM](https://llvm.org/)
 
 Oh TinyGo, I had some hopes for you, but ultimately the most recent standard Go compiler had better support for Web Assembly out of the box.
 
-However, the binaries were a lot smaller. The TinyGo binaries were only a few kilabytes. Whereas the Go binaries were around 3 to 4 megabytes. (note: 3 to 4 megabytes is fairly large to be shipping over http)
+However, the binaries were a lot smaller. The TinyGo binaries were only a few kilabytes. Whereas the Go binaries were around 2 to 3 megabytes. (note: 2 to 3 megabytes is fairly large to be shipping over http)
 
 ### Concurrency?
 
