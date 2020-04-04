@@ -22,7 +22,7 @@ class Index extends React.Component {
 
         <p>
           This site serves as a place for me to collect my thoughts, document
-          some personal projects, and share knowledge.
+          some personal projects, share knowledge, and a tool to help me learn.
         </p>
         <p>
           Check out the my <Link to="/about">about me</Link> and join my{' '}
