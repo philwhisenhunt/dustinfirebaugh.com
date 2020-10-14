@@ -9,7 +9,7 @@ module.exports = {
       github: `dfirebaugh`,
     },
   },
-  pathPrefix: '/dustinfirebaugh.com',
+  pathPrefix: '',
   plugins: [
     {
       resolve: `gatsby-source-filesystem`,
